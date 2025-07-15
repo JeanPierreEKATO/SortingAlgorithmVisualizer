@@ -3,6 +3,7 @@ from enum import Enum
 
 class SortingAlgorithmType(Enum):
     INSERTION_SORT = 1
+    QUICK_SORT = 2
 
 class SortingData:
     def __init__(self):
@@ -34,12 +35,14 @@ class SortingData:
         self.isSorted = self.checkIfSorted()
 
     def Sort(self, sortingVisualizer) -> None:
+
         match self.algorithmType:
+
             case SortingAlgorithmType.INSERTION_SORT:
                 self.instertionSort(sortingVisualizer)
-            # case SortingAlgorithmType.BUBBLE_SORT:
-            #     self.bubbleSort(sortingVisualizer)
-            # ...weitere Algorithmen...
+
+            case SortingAlgorithmType.QUICK_SORT:
+                self.quickSort(self.data, 0, len(self.data) - 1, sortingVisualizer)
 
     def instertionSort(self, sortingVisualizer) -> None:
 
@@ -56,11 +59,40 @@ class SortingData:
                 itemUnderIndex -= 1
                 sortingVisualizer.drawFrameWithDelay()
 
-            if(sortingVisualizer.running == False):
+            if(sortingVisualizer.running == False):     # if the user has closed the window, we stop sorting
                 return
         self.isSorted = True
 
-    
+    def quickSort(self, array, start, end, sortingVisualizer):
+
+        if start >= end or sortingVisualizer.running == False:  # if we are at the end of the array or the user has closed the window, we stop sorting
+            return
+
+        p = self.partition(array, start, end, sortingVisualizer)
+        self.quickSort(array, start, p-1, sortingVisualizer)
+        self.quickSort(array, p+1, end, sortingVisualizer)
+
+    def partition(self, array, start, end, sortingVisualizer):
+        pivot = array[start]
+        low = start + 1
+        high = end
+
+        while sortingVisualizer.running == True:
+            sortingVisualizer.drawFrameWithDelay()
+            while low <= high and array[high] >= pivot:
+                high = high - 1
+
+            while low <= high and array[low] <= pivot:
+                low = low + 1
+
+            if low <= high:
+                array[low], array[high] = array[high], array[low]
+            else:
+                break
+
+        array[start], array[high] = array[high], array[start]
+
+        return high
 
     # Checks if the data is sorted in ascending order
     def checkIfSorted(self) -> bool:

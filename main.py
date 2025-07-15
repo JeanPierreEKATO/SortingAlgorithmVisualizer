@@ -4,7 +4,8 @@ from sortingAlgorithms import SortingAlgorithmType
 def main():
     visualizer = sv.SortingVisualizer()
     visualizer.sortingData.createAndRandomizeData(100)
-    visualizer.sortingData.algorithmType = SortingAlgorithmType.INSERTION_SORT
+    visualizer.sortingData.algorithmType = SortingAlgorithmType.QUICK_SORT
+    visualizer.delay = 10
 
     visualizer.run()
 
