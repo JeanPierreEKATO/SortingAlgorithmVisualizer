@@ -48,14 +48,19 @@ class SortingData:
             itemUnderIndex = i - 1              # index of the item under the current item
 
             # loop through the list backwards until we find an item that is smaller than the current item
-            while itemUnderIndex >= 0 and currentItem < self.data[itemUnderIndex]:
+            while itemUnderIndex >= 0 and currentItem < self.data[itemUnderIndex] and sortingVisualizer.running == True:
                 # swap the current item with the item under it
                 # "= self.data[itemUnderIndex + 1] ..." could be exchanged with "= currentItem ..." since we always swap the current item with the item under it
                 self.data[itemUnderIndex], self.data[itemUnderIndex + 1] = self.data[itemUnderIndex + 1], self.data[itemUnderIndex]
                 # continue to the next item under the current item
                 itemUnderIndex -= 1
                 sortingVisualizer.drawFrameWithDelay()
+
+            if(sortingVisualizer.running == False):
+                return
         self.isSorted = True
+
+    
 
     # Checks if the data is sorted in ascending order
     def checkIfSorted(self) -> bool:

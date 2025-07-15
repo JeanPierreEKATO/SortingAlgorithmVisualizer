@@ -41,7 +41,7 @@ class SortingVisualizer:
 
     def Loop(self):
         while self.running:
-            # poll for events
+
             self.eventPolling()
 
             self.drawSorting()
@@ -55,11 +55,11 @@ class SortingVisualizer:
 
     def drawSorting(self):
         while self.sortingData.isSorted == False and self.running == True:
-            self.eventPolling() 
 
             self.sortingData.Sort(self)
 
     def drawFrame(self):
+        self.eventPolling()
         self.screen.fill("black")
         self.drawDataset()
         self.display.flip()
