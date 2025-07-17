@@ -18,7 +18,7 @@ class SortingData:
 
         self.data.clear()
 
-        for i in range(0, size):
+        for i in range(1, size + 1):
             self.data.append(i)
         self.isSorted = True
 
@@ -27,7 +27,8 @@ class SortingData:
         
         self.data.clear()
 
-        for i in range(0, size):
+        for i in range(1, size + 1):
+            print(i)
             self.data.append(i)
 
         np.random.shuffle(self.data)
@@ -215,7 +216,6 @@ class SortingData:
 
     # Checks if the data is sorted in ascending order
     def checkIfSorted(self) -> bool:
-        print("Checking if sorted")
         for i in range(1, len(self.data)):
             if self.data[i] < self.data[i - 1]:
                 self.isSorted = False
