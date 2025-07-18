@@ -1,3 +1,4 @@
+import os
 import pygame
 from sortingAlgorithms import SortingData
 from sortingAlgorithms import SortingAlgorithmType
@@ -5,10 +6,11 @@ from sortingAlgorithms import SortingAlgorithmType
 
 class SortingVisualizer:
 
-    def __init__(self, SCREEN_WIDTH = 1920, SCREEN_HEIGHT = 1080, DATA_SIZE = 10, SORTING_ALGORITHM_TYPE = SortingAlgorithmType.INSERTION_SORT, OFFSET = 1, DELAY = 5):
+    def __init__(self, SCREEN_WIDTH = 1920, SCREEN_HEIGHT = 1080, FULLSCREEN = True, DATA_SIZE = 10, SORTING_ALGORITHM_TYPE = SortingAlgorithmType.INSERTION_SORT, OFFSET = 1, DELAY = 5):
         # Default pygame setup
         self.screenWidth: int = SCREEN_WIDTH
         self.screenHeight: int = SCREEN_HEIGHT
+        self.fullscreen: bool = FULLSCREEN
         self.screen: pygame.Surface | None = None
         self.display: pygame.Surface | None = None
         self.clock: pygame.time.Clock | None = None
@@ -36,17 +38,27 @@ class SortingVisualizer:
     def Init(self):
         self.initPygameSetup()
         #Note: There is no "initSortingSetup()" Method needed, since its dynamic, has default values and can be altered by the user befor the run() method is called => should not be altered here
-        self.initDrawingSetup()  
+        self.initDrawingSetup()
 
     def initPygameSetup(self):
+        os.environ["SDL_VIDEO_WINDOW_POS"] = "100,100"  # Make sure the window is not centered when in windowed mode  
+                                                        # => Prevents a seemingly fullscreen even though its windowed when self.screen resolution => monitor resolution
         pygame.init()
         #Note: self.screenWidth is dynamic, has default value of 1920 and can be altered by the user befor the run() method is called => should not be altered here
         #Note: self.screenHeight is dynamic, has standard value of 1000 and can be altered by the user befor the run() method is called => should not be altered here
-        self.screen = pygame.display.set_mode((self.screenWidth, self.screenHeight))
+        #Note: self.fullscreen is dynamic, has standard value of True and can be altered by the user befor the run() method, and at runtime is called => should not be altered here
+        self.setScreenMode()    #self.screen bein initialized, based on self.fullscreen value
         self.display = pygame.display
         self.clock = pygame.time.Clock()
         self.running = True
         self.paused = False
+    
+    def setScreenMode(self):
+        if self.fullscreen == True:
+            self.screen = pygame.display.set_mode((self.screenWidth, self.screenHeight), pygame.FULLSCREEN)
+        else:
+            self.screen = pygame.display.set_mode((self.screenWidth, self.screenHeight))
+
 
     def initDrawingSetup(self):
 
@@ -70,7 +82,9 @@ class SortingVisualizer:
                 self.running = False
             if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                 self.pause()
-    
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_F11:
+                self.switchFullscreen()
+
     def pause(self):
 
         self.paused = True
@@ -82,7 +96,21 @@ class SortingVisualizer:
                     self.running = False
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     self.paused = False
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_F11:
+                    self.switchFullscreen()
+    
+    def switchFullscreen(self):
 
+        # If fullscreen was True before triggering the event, Switch to Windowed mode | Else the other way around
+        if self.fullscreen == True:
+            self.screen = pygame.display.set_mode((self.screenWidth, self.screenHeight))
+            self.fullscreen = False
+            self.drawFrame()
+        else:
+            self.screen = pygame.display.set_mode((self.screenWidth, self.screenHeight), pygame.FULLSCREEN)
+            self.fullscreen = True
+            self.drawFrame()
+        
     def drawSorting(self):
         while self.sortingData.isSorted == False and self.running == True:
 
