@@ -9,10 +9,10 @@ class SortingAlgorithmType(Enum):
     HEAP_SORT = 5
 
 class SortingData:
-    def __init__(self):
+    def __init__(self, SORTING_ALGORITHM_TYPE = SortingAlgorithmType.INSERTION_SORT):
         self.data: list = []
         self.isSorted: bool = False     # Always ascending order
-        self.algorithmType: SortingAlgorithmType = SortingAlgorithmType.INSERTION_SORT
+        self.algorithmType: SortingAlgorithmType = SORTING_ALGORITHM_TYPE
 
     def createData(self, size: int) -> None:
 
@@ -24,12 +24,7 @@ class SortingData:
 
     
     def createAndRandomizeData(self, size: int) -> None:
-        
-        self.data.clear()
-
-        for i in range(1, size + 1):
-            print(i)
-            self.data.append(i)
+        self.createData()
 
         np.random.shuffle(self.data)
         self.isSorted = self.checkIfSorted()
@@ -43,7 +38,7 @@ class SortingData:
         match self.algorithmType:
 
             case SortingAlgorithmType.INSERTION_SORT:
-                self.instertionSort(sortingVisualizer)
+                self.insertionSort(sortingVisualizer)
 
             case SortingAlgorithmType.QUICK_SORT:
                 self.quickSort(self.data, 0, len(self.data) - 1, sortingVisualizer)
@@ -57,7 +52,7 @@ class SortingData:
             case SortingAlgorithmType.HEAP_SORT:
                 self.heapSort(self.data, sortingVisualizer)
 
-    def instertionSort(self, sortingVisualizer) -> None:
+    def insertionSort(self, sortingVisualizer) -> None:
 
         for i in range(1, len(self.data)):      # Start from the second element: Needs at least one element to compare with
             currentItem = self.data[i]          # safe item to compare through the list
