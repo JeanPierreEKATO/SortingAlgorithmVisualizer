@@ -10,6 +10,8 @@ class SortingVisualizer:
         # Default pygame setup
         self.screenWidth: int = SCREEN_WIDTH
         self.screenHeight: int = SCREEN_HEIGHT
+        self.nativeScreenWidth: int | None = None
+        self.nativeScreenHeight: int | None = None
         self.fullscreen: bool = FULLSCREEN
         self.screen: pygame.Surface | None = None
         self.display: pygame.Surface | None = None
@@ -46,6 +48,9 @@ class SortingVisualizer:
         pygame.init()
         #Note: self.screenWidth is dynamic, has default value of 1920 and can be altered by the user befor the run() method is called => should not be altered here
         #Note: self.screenHeight is dynamic, has standard value of 1000 and can be altered by the user befor the run() method is called => should not be altered here
+        info = pygame.display.Info()
+        self.nativeScreenWidth = info.current_w
+        self.nativeScreenHeight = info.current_h
         #Note: self.fullscreen is dynamic, has standard value of True and can be altered by the user befor the run() method, and at runtime is called => should not be altered here
         self.setScreenMode()    #self.screen bein initialized, based on self.fullscreen value
         self.display = pygame.display
@@ -55,7 +60,7 @@ class SortingVisualizer:
     
     def setScreenMode(self):
         if self.fullscreen == True:
-            self.screen = pygame.display.set_mode((self.screenWidth, self.screenHeight), pygame.FULLSCREEN)
+            self.screen = pygame.display.set_mode((self.nativeScreenWidth, self.nativeScreenHeight), pygame.FULLSCREEN)
         else:
             self.screen = pygame.display.set_mode((self.screenWidth, self.screenHeight))
 
@@ -107,9 +112,14 @@ class SortingVisualizer:
             self.fullscreen = False
             self.drawFrame()
         else:
-            self.screen = pygame.display.set_mode((self.screenWidth, self.screenHeight), pygame.FULLSCREEN)
+            self.screen = pygame.display.set_mode((self.nativeScreenWidth, self.nativeScreenHeight), pygame.FULLSCREEN)
             self.fullscreen = True
             self.drawFrame()
+
+        #On resolution change => drawing variables have to adept to resolution
+        self.initDrawingSetup()
+        #In case the process is paused => draw frame with new drawing resolution (just makes experience more pleasent)
+        self.drawFrame()
         
     def drawSorting(self):
         while self.sortingData.isSorted == False and self.running == True:
