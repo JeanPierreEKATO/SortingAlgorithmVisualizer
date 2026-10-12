@@ -3,13 +3,13 @@ from sortingAlgorithms import SortingAlgorithmType
 
 def main():
     try:
-        width = 1000
-        height = 500
+        width = 1920
+        height = 1080
         fullscreen = False
         sizeOfData = 100
-        algorithmType = SortingAlgorithmType.QUICK_SORT
+        algorithmType = SortingAlgorithmType.MERGE_SORT
         visualDataOffset = 0
-        delayBetweenFrames = 10
+        delayBetweenFrames = 100
 
         visualizer = sv.SortingVisualizer(SCREEN_WIDTH = width, SCREEN_HEIGHT = height, FULLSCREEN = fullscreen, DATA_SIZE = sizeOfData, SORTING_ALGORITHM_TYPE = algorithmType, OFFSET = visualDataOffset, DELAY = delayBetweenFrames)
         

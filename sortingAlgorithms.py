@@ -7,6 +7,7 @@ class SortingAlgorithmType(Enum):
     RADIX_SORT = 3
     MERGE_SORT = 4
     HEAP_SORT = 5
+    SELECTION_SORT = 6
 
 class SortingData:
     def __init__(self, SORTING_ALGORITHM_TYPE = SortingAlgorithmType.INSERTION_SORT):
@@ -22,7 +23,7 @@ class SortingData:
             self.data.append(i)
         self.isSorted = True
 
-    
+
     def createAndRandomizeData(self, size: int) -> None:
         self.createData()
 
@@ -51,6 +52,9 @@ class SortingData:
             
             case SortingAlgorithmType.HEAP_SORT:
                 self.heapSort(self.data, sortingVisualizer)
+
+            case SortingAlgorithmType.SELECTION_SORT:
+                self.selectionSort(self.data, sortingVisualizer)
 
     def insertionSort(self, sortingVisualizer) -> None:
 
@@ -217,4 +221,18 @@ class SortingData:
                 return False
         self.isSorted = True
         return True
-    
+
+    def selectionSort(self, arr, sortingVisualizer):
+        n = len(arr)
+
+        for i in range(n - 1):
+            min_index = i
+
+            for j in range(i + 1, n):
+                if arr[j] < arr[min_index]:
+                    min_index = j
+
+            arr[i], arr[min_index] = arr[min_index], arr[i]
+            sortingVisualizer.drawFrameWithDelay()
+
+        return True
